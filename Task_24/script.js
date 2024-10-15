@@ -1,30 +1,29 @@
 $(document).ready(function(){	
 	$('#check-btn').click(function(){
-        let firstName=$('#firstname').val();
 		let email=$('#email').val();
-		if(email &&  firstName){
-			$.ajax({	
-				url:'./Components/checkEmail.cfc?method=checkEmail',
-				type:'POST',
-				data:{firstname:firstName,email:email},
-				dataType:"text",
-				success:function(response){
-						if(response.trim()==="false"){
-							$('#email-error').text('Mail Id already Exists');
-							$('#submit-btn').prop('disabled',true);
-						}
-						else{
-							$('#email-error').text('');
-							$('#submit-btn').prop('disabled',false);
-						}	
-				},
-				error:function(){
-					alert("An Error Occured");
-				}	
-			});
+		alert(email);
+		if(email){
+				$.ajax({
+					url: 'Components/task_24.cfc?method=emailCheck',
+					type:'POST',
+					data: {email:email },
+					dataType:'json',
+					success: function(response){
+							let data=JSON.stringify(response);
+							console.log(response);
+							if(data.trim()==="Exists"){
+								alert('Mail Id already Exists');
+								$('#submit-btn').prop('disabled',true);
+							}
+							else if(data.trim()==="NotExists"){
+								$('#submit-btn').prop('disabled',false);
+							}		
+					}
+				});		
 		}
 		else{
 			alert("Please enter an email Id");
-		}		
+		}
+		return false;			
 	});
 });
